@@ -8,6 +8,7 @@
 let deck = [];
 const tipos = ['C', 'D', 'H', 'S'];
 const especiales = ['A', 'J', 'Q', 'K'];
+let cartasJugador = [];
 
 let puntosJugador = 0;
 let puntosComputadora = 0;
@@ -15,10 +16,14 @@ let puntosComputadora = 0;
 //HTML REFERENCES
 
 const btnPedir = document.querySelector('.btnPedir');
+const btnDetener = document.querySelector('.btnDetener');
+const btnNuevo = document.querySelector('.btnNuevo');
+
 const puntosHTML = document.querySelectorAll('small');
+
 const divCartasJugador = document.querySelector('#jugador-cartas');
 const divCartasComputadora = document.querySelector('#computadora-cartas');
-const btnDetener = document.querySelector('.btnDetener');
+
 
 // CREATE DECK
 
@@ -89,7 +94,23 @@ const turnoComputadora = (puntosMinimos) => {
 
    } while ((puntosComputadora <= puntosMinimos) && puntosMinimos <= 21);
 
-}
+   setTimeout(() => {
+
+      if (puntosComputadora === puntosMinimos) {
+         alert('Nadie gana');
+      } else if (puntosMinimos > 21 ) {
+         alert('Computadora Gana');
+      } else if (puntosComputadora > 21 ) {
+         alert('Jugador Gana');
+      } else if (puntosComputadora > puntosMinimos) {
+         alert('Computadora Gana');
+      } else {
+         alert('Jugador Gana');
+      }
+
+   }, 100);
+
+};
 
 //EVENTS
 
@@ -97,6 +118,7 @@ btnPedir.addEventListener('click', () => {
 
 
    const carta = pedirCarta();
+   cartasJugador.push(carta);
    puntosJugador = puntosJugador + valorCarta(carta);
    puntosHTML[0].innerText = puntosJugador;
 
@@ -104,6 +126,7 @@ btnPedir.addEventListener('click', () => {
    imgCarta.src = `assets/cartas/${ carta }.png`;
    imgCarta.classList.add('card');
    divCartasJugador.append(imgCarta);
+
    if (puntosJugador > 21 ) {
       console.warn('Lo siento mucho, perdiste');
       btnPedir.disabled = true;
@@ -115,6 +138,7 @@ btnPedir.addEventListener('click', () => {
       btnDetener.disabled = true;
       turnoComputadora(puntosJugador);
    } 
+   console.log(cartasJugador);
        
 });
 
@@ -122,5 +146,27 @@ btnDetener.addEventListener('click', () => {
    btnPedir.disabled   = true;
    btnDetener.disabled = true;
    turnoComputadora( puntosJugador );
-})
+});
 
+btnNuevo.addEventListener('click', () => {
+   //document.location.reload();
+   console.clear();
+   deck = [];
+   cartasJugador= [];
+   crearDeck();
+   
+   puntosJugador     = 0;
+   puntosComputadora = 0;
+
+   puntosHTML[0].innerText = 0;
+   puntosHTML[1].innerText = 0;
+
+   divCartasComputadora.innerHTML = '';
+   divCartasJugador.innerHTML = '';
+
+   btnPedir.disabled   = false;
+   btnDetener.disabled = false;
+});
+
+
+ 
