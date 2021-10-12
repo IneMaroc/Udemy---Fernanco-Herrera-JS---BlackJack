@@ -8,7 +8,9 @@
 let deck = [];
 const tipos = ['C', 'D', 'H', 'S'];
 const especiales = ['A', 'J', 'Q', 'K'];
+
 let cartasJugador = [];
+let cartasComputadora = [];
 
 let puntosJugador = 0;
 let puntosComputadora = 0;
@@ -78,8 +80,8 @@ const valorCarta = (carta) => {
 const turnoComputadora = (puntosMinimos) => {
 
    do {
-
       const carta = pedirCarta();
+      cartasComputadora.push(carta);
       puntosComputadora = puntosComputadora + valorCarta(carta);
       puntosHTML[1].innerText = puntosComputadora;
 
@@ -90,6 +92,10 @@ const turnoComputadora = (puntosMinimos) => {
 
       if (puntosMinimos > 21) {
          break;
+      } else if ((puntosMinimos === 21 && cartasJugador.length === 2) && (puntosComputadora < 21 && cartasComputadora.length === 2)) {
+         break;
+      } else if (puntosComputadora >= 17) {
+         break;
       }
 
    } while ((puntosComputadora <= puntosMinimos) && puntosMinimos <= 21);
@@ -97,13 +103,19 @@ const turnoComputadora = (puntosMinimos) => {
    setTimeout(() => {
 
       if (puntosComputadora === puntosMinimos) {
-         alert('Nadie gana');
+         alert('Empate, Nadie Gana ni Pierde');
+      } else if (cartasJugador.length === 2 && puntosMinimos === 21)  {
+         alert('BlackJack! Jugador Gana');
       } else if (puntosMinimos > 21 ) {
          alert('Computadora Gana');
       } else if (puntosComputadora > 21 ) {
          alert('Jugador Gana');
       } else if (puntosComputadora > puntosMinimos) {
-         alert('Computadora Gana');
+         if (cartasComputadora.length === 2 && puntosComputadora === 21) {
+            alert('BlackJack! Computadora Gana');
+         } else {
+            alert('Computadora Gana');
+         }
       } else {
          alert('Jugador Gana');
       }
@@ -138,7 +150,6 @@ btnPedir.addEventListener('click', () => {
       btnDetener.disabled = true;
       turnoComputadora(puntosJugador);
    } 
-   console.log(cartasJugador);
        
 });
 
