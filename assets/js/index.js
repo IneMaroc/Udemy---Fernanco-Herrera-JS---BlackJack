@@ -12,6 +12,7 @@ const especiales = ['A', 'J', 'Q', 'K'];
 let cartasJugador = [];
 let cartasComputadora = [];
 
+
 let puntosJugador = 0;
 let puntosComputadora = 0;
 
@@ -71,7 +72,7 @@ const valorCarta = (carta) => {
    const aux = carta.substring(0, carta.length - 1);
    return (isNaN(aux)) ? 
          (aux === 'A') ? 11 : 10 
-      : aux * 1;
+      : aux * 1
 
 };
 
@@ -82,7 +83,12 @@ const turnoComputadora = (puntosMinimos) => {
    do {
       const carta = pedirCarta();
       cartasComputadora.push(carta);
-      puntosComputadora = puntosComputadora + valorCarta(carta);
+      let aux = valorCarta(carta);
+      if(aux === 11 && (aux + puntosComputadora) > 21) {
+         puntosComputadora = (puntosComputadora + aux) - 20;
+      } else {
+         puntosComputadora = puntosComputadora + aux;
+      }
       puntosHTML[1].innerText = puntosComputadora;
 
       const imgCarta = document.createElement('img');
@@ -92,8 +98,13 @@ const turnoComputadora = (puntosMinimos) => {
 
       if (puntosMinimos > 21) {
          break;
-      } else if ((puntosMinimos === 21 && cartasJugador.length === 2) && (puntosComputadora < 21 && cartasComputadora.length === 2)) {
-         break;
+      } else if (puntosMinimos === 21 && cartasJugador.length === 2) {
+            if (puntosComputadora < 10 && cartasComputadora.length < 2) {
+               break;
+            } else if (puntosComputadora < 21 && cartasComputadora.length === 2) {
+               break;
+            }
+
       } else if (puntosComputadora >= 17) {
          break;
       }
@@ -102,7 +113,7 @@ const turnoComputadora = (puntosMinimos) => {
 
    setTimeout(() => {
 
-      if (puntosComputadora === puntosMinimos) {
+      if ((puntosComputadora === puntosMinimos) && cartasJugador.length > 2) {
          alert('Empate, Nadie Gana ni Pierde');
       } else if (cartasJugador.length === 2 && puntosMinimos === 21)  {
          alert('BlackJack! Jugador Gana');
@@ -131,7 +142,13 @@ btnPedir.addEventListener('click', () => {
 
    const carta = pedirCarta();
    cartasJugador.push(carta);
-   puntosJugador = puntosJugador + valorCarta(carta);
+   let aux = valorCarta(carta);
+   if(aux === 11 && (aux + puntosJugador) > 21) {
+      puntosJugador = (puntosJugador + aux) - 20;
+   } else {
+      puntosJugador = puntosJugador + aux;
+   }
+   
    puntosHTML[0].innerText = puntosJugador;
 
    const imgCarta = document.createElement('img');
