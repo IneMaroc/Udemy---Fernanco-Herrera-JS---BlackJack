@@ -69,9 +69,9 @@ const miModulo = (() => {
          throw 'No hay cartas en la Baraja';
       }
       let i = Math.floor(Math.random()*deck.length);
-
-      deck = deck.filter((element) => element !== deck[i]);
-      return deck[i];
+      const carta = deck[i];
+      deck = deck.filter((element) => element !== carta);
+      return carta;
 
    };
 
@@ -132,7 +132,7 @@ const miModulo = (() => {
          } else if (puntosMinimos === 21 && cartasJugador === 2) {
                if (puntosComputadora < 10 && cartasComputadora.length < 2) {
                   break;
-               } else if (puntosComputadora < 21 && cartasComputadora.length >= 2) {
+               } else if (puntosComputadora < 21 && cartasComputadora.length <= 2) {
                   break;
                }
 
